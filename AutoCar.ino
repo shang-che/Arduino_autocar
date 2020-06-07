@@ -1,10 +1,4 @@
-/* 
-  Code 2
-  Board:        Adafruit Motor/Stepper/Servo Shield for Arduino kit - v1.2 & 28BYJ-48 Stepper Motor & Arduino Uno IDE 1.8.5
-  Connections:  See Fritzing in https://medium.com/jungletronics/28byj-48-stepper-motor-peak-rpm-658eae6afe2f 
-  Power Supply: 5v .5A USB Power Cable right into 5.5mm Jack of Adafruit Board
-  Max RPM:      15 RPM in FullDriver Mode
-*/
+
 #include <AFMotor.h>
 
 // Connect a stepper motor with 64 steps per revolution (5.625 degree)
