@@ -1,8 +1,4 @@
-ar15A
+(有X)
 123
-ae82L123
+(沒X)cre
 123
-(不知道會不會下次使用時reset)
-AT+PIN1234
-AT+NAME:ae827
-AT+NAME:ar152
