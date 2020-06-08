@@ -1,72 +1,49 @@
-
 #include <AFMotor.h>
 
 // Connect a stepper motor with 64 steps per revolution (5.625 degree)
-// to motor port #2 (M3 and M4)
-AF_Stepper motor(64, 1);
+// to motor port #2 (M3 and M4) 
+AF_Stepper left(256, 1);
+AF_Stepper right(16, 2);
 
-boolean waveDrive = false;     // fire just a single phase at a time (Single coil)
-boolean fullDrive = false;    // energize two phases at a time (Double coil)
-boolean halfStep = false;     // combination of wave driving and full stepping (Interleave coil)
-boolean microStep = true;
-boolean bothDirection = false;
+int microStep = 0;
+boolean bothDirection = true;
 
-unsigned int speed = 2000;    // 2000make a modification for your test
+//gunsigned int speed = 2000;    // 2000make a modification for your test
 
-/*  LAB RESULTS:
- *  Configurations:  (motor.setSpeed(XXX);)
- * (waveDrive)RPM_peak  350speed@5v resuts 12 rpm or  700rpm@12v resuts  20 rpm (both .5A) - > Single coil steps (2048 steps)
- * (fullDrive)RPM_peak  500speed@5v resuts 15 rpm or  700rpm@12v resuts  20 rpm (both .5A) - > Double coil steps (2048 steps) :)ideal 15 rpm 500speed@5v 
- * (halfStep) RPM_peak  400speed@5v resuts 12 rpm or  1000rpm@12v resuts 24 rpm (both .5A) - > Interleave coil steps  (4096 steps) Heat issue :/  
- * (microStep)RPM_peak 1000speed@5v resuts 10 rpm or  1000rpm@12v resuts 11 rpm (both .5A) - > Single coil steps (2048 steps) increasing the voltage makes no difference in speed  
- * 
-*/
+//unsigned long int ltime = 0, rtime = 0;
 
 void setup() {
   Serial.begin(9600);         // set up Serial library at 9600 bps
+  Serial.setTimeout(100);
   Serial.println("Stepper test!");
-
-  motor.setSpeed(speed);
-
+ // left.setSpeed(speed);
+  //right.setSpeed(speed);
 }
-
 void loop() {
-
-  unsigned long startTime;
-  unsigned long endTime;
-  unsigned long duration;
-  int rpm;
-
-  startTime = micros();
-
-
-  if (waveDrive)
-  {
-    Serial.println("Single coil steps");
-    motor.step(2048, FORWARD, SINGLE);
-    if (bothDirection) motor.step(2048, BACKWARD, SINGLE);
+//  Serial.print("ms:");
+//  Serial.println(microStep);
+  if(Serial.available()) {
+    microStep = Serial.parseInt();
   }
-
-  if (fullDrive)
+  
+  if (microStep==1)
   {
-
-    Serial.println("Double coil steps");
-    motor.step(2048, FORWARD, DOUBLE);
-    if (bothDirection) motor.step(2048, BACKWARD, DOUBLE);
+//    Serial.println("Micrsostep steps");
+    //unsigned long int currentTime = millis();
+    //if(currentTime-ltime>1) {
+      left.onestep(BACKWARD, DOUBLE );
+      right.onestep(FORWARD, DOUBLE );
+      delay(2);
+    //  ltime = currentTime;
+    //}
+    //if(currentTime-rtime>1) {
+    //  right.onestep(FORWARD, DOUBLE    );
+    //  rtime = currentTime;
+    //}
+//    left.step(2048, FORWARD, MICROSTEP);
+//    right.step(2048, FORWARD, MICROSTEP);
+//    if (bothDirection){
+//      left.step(2048, BACKWARD, MICROSTEP);
+//      right.step(2048, BACKWARD, MICROSTEP);}
   }
-
-  if (halfStep)
-  {
-    Serial.println("Interleave coil steps");
-    motor.step(2*2048, FORWARD, INTERLEAVE);
-    if (bothDirection) motor.step(2*2048, BACKWARD, INTERLEAVE);
-  }
-
-  if (microStep)
-  {
-    Serial.println("Micrsostep steps");
-    motor.step(2048, FORWARD, MICROSTEP);
-    if (bothDirection) motor.step(2048, BACKWARD, MICROSTEP);
-  }
-
 }
