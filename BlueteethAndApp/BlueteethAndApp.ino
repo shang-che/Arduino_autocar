@@ -4,12 +4,12 @@ const int rxpin = 2;
 const int txpin = 3;
 SoftwareSerial bluetooth(rxpin, txpin); 
 
-int TrigPinF = 7;
-int EchoPinF = 6;
-//------int TrigPinL = X;
-//------int EchoPinL = X;
-//------int TrigPinR = X;
-//------int EchoPinR = X;
+int TrigPinF = A0;
+int EchoPinF = A1;
+int TrigPinL = A2;
+int EchoPinL = A3;
+int TrigPinR = A4;
+int EchoPinR = A5;
 
 
 unsigned long getDistance(int TrigPin,int EchoPin) {
@@ -30,10 +30,10 @@ unsigned long getDistance(int TrigPin,int EchoPin) {
 void setup() {                
     pinMode(EchoPinF, INPUT);
     pinMode(TrigPinF, OUTPUT);
-    //-----pinMode(EchoPinL, INPUT);
-    //-----pinMode(TrigPinL, OUTPUT);
-    //-----pinMode(EchoPinR, INPUT);
-    //-----pinMode(TrigPinR, OUTPUT);
+    pinMode(EchoPinL, INPUT);
+    pinMode(TrigPinL, OUTPUT);
+    pinMode(EchoPinR, INPUT);
+    pinMode(TrigPinR, OUTPUT);
     Serial.begin(9600);
     bluetooth.begin(9600);
     bluetooth.setTimeout(100);
@@ -41,36 +41,36 @@ void setup() {
 void loop() {
     unsigned long distanceF = getDistance(TrigPinF,EchoPinF);
     Serial.println(distanceF);
-    //--------unsigned long distanceL = getDistance(TrigPinL,EchoPinL);
-    //--------Serial.println(distanceL);
-    //--------unsigned long distanceR = getDistance(TrigPinR,EchoPinR);
-    //--------Serial.println(distanceR);
+    unsigned long distanceL = getDistance(TrigPinL,EchoPinL);
+    Serial.println(distanceL);
+    unsigned long distanceR = getDistance(TrigPinR,EchoPinR);
+    Serial.println(distanceR);
+    Serial.println("---------------");
     
     // 用 @ 做為開始字元
     bluetooth.print("@"); 
     bluetooth.print(distanceF);
     bluetooth.write(13); 
-    //--------bluetooth.print(distanceL);  
-    //--------bluetooth.write("14");     
-    //--------bluetooth.print(distanceR);
-    //--------bluetooth.print("15");      
+    bluetooth.print(distanceL);  
+    bluetooth.write("14");     
+    bluetooth.print(distanceR);
+    bluetooth.write("15");      
     
     // 用 ASCII碼 13(F),14(L),15(R) 做為結束字元
+    
+    
     delay(100);
 }
-
-/*---------------測試與設定藍芽用------------------
+/*
+//---------------測試與設定藍芽用------------------
 #include <SoftwareSerial.h>
-
 const int rxpin = 2; // 接收 pin
 const int txpin = 3; // 發送 pin
 SoftwareSerial bluetooth(rxpin, txpin); // 建立虛擬序列埠
-
 void setup() {
   Serial.begin(9600);
   bluetooth.begin(9600); // 初始化藍芽序列埠
 }
-
 void loop() {
   if (bluetooth.available())
   {
@@ -82,5 +82,4 @@ void loop() {
     char c = Serial.read();
     bluetooth.print(c);
   }
-}
-----------------------------------*/
+}*/
