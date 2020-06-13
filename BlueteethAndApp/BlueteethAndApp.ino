@@ -51,14 +51,14 @@ void loop() {
     //在app顯示距離
     // 用 @ 做為開始字元
     bluetooth.print("@"); 
-    bluetooth.print(distanceF);
-    bluetooth.print("13"); 
-    bluetooth.print(distanceL); 
-    bluetooth.print("14");    
-    bluetooth.print(distanceR);
-    bluetooth.write("15");  
+    bluetooth.print("11");
+    bluetooth.write(13); 
+    bluetooth.print("22"); 
+    bluetooth.write(13);   
+    bluetooth.print("33");
+    bluetooth.write(13); 
     
-    // 用 ASCII碼 13(F) 14(L) 15(R) 做為結束字元
+    // 用 ASCII碼 13(F)做為結束字元
     
     
     delay(100);
