@@ -1,5 +1,5 @@
 #include <AFMotor.h>
-
+#include <SoftwareSerial.h>
 #define LeftTrig A0 //定義超音波感測器腳位
 #define LeftEcho A1
 #define RightTrig A2
@@ -75,6 +75,18 @@ void loop() {
   {
 
   }
+  
+  //在監控面顯示數據
+    unsigned long distanceF = GetDistance(FrontTrig,FrontEcho);
+    Serial.println(distanceF);
+    delay(100);
+    unsigned long distanceL = GetDistance(LeftTrig,LeftEcho);
+    Serial.println(distanceL);
+    unsigned long distanceR = GetDistance(RightTrig,RightEcho);
+    Serial.println(distanceR);
+    Serial.println("---------------");
+    
+    
   sensorstate = digitalRead(sensor);
  // if(sensorstate == 0)
  //  Serial.println("clear");
@@ -83,9 +95,15 @@ void loop() {
     
  // delay(500);
   
-  if(Serial.available()) {
-    start = Serial.parseInt();
-  }
+ // 藍芽傳輸部分
+ // 用 @ 做為開始字元  @F L R換行
+    bluetooth.print("@"); 
+    bluetooth.print(distanceF);
+    bluetooth.print(" "); 
+    bluetooth.print(distanceL); 
+    bluetooth.print(" ");   
+    bluetooth.print(distanceR);
+    bluetooth.write(13); 
   
   
 }
