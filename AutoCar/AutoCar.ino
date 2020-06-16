@@ -20,7 +20,7 @@ AF_Stepper right(256, 2);
 boolean sensorstate = 0; //宣告感應器狀態
 
 int start = 0; //宣告開始變數
-char runstatus; //給藍芽的狀態
+char runstatus= 'X'; //給藍芽的狀態
 
 //定義前進函數
 void forward(){
@@ -79,8 +79,6 @@ void setup() {
 }
 
 void loop() {
-  start=bluetooth.read(); //偵測"開始"是否啟動
-  if (start==1 ){
    
   sensorstate = digitalRead(sensor);
  // if(sensorstate == 0)
@@ -102,47 +100,25 @@ void loop() {
     Serial.println("---------------");
 
      //修正左右**********未測試*************  
-      /*35>  
-      */
+      
       int compare=distanceL-distanceR; //中間約左4右4
-      if(compare>=-1&&compare<=1){//不需要修正就繼續前進
-        if(distanceF<=10){//如果前方死路
-         //****待寫 
-        }
-        else{
+      if(distanceF>=10){//如果前方死路
+         if(compare>=-1&&compare<=1){//不需要修正就繼續前進
           forward();
         }
-      }
-      else if(compare>=2&&compare<=12){//左大右小
-         leftward();
-         forward();
-      }
-      else if(compare<=-2&&compare>=-12){//左小右大
-         rightward();
-         forward();
-      }
-      else if(compare>=35){//左轉
-        if(distanceF<=10){//前面沒路 可能出現轉了左彎之後，偵測到左邊是空的而繼續轉左
-         for(int i=0;i<10;i++){//***********不知道轉幾次       
-            leftward();
-         }
-        }
-        else{
-          //******待施工
-        }
-      }
-      else if(compare<=-35){//右轉 可能出現轉了右彎之後，偵測到右邊是空的而繼續轉右
-        if(distanceF<=10){//前面沒路
-          for(int i=0;i<10;i++)//***********不知道轉幾次       
-            rightward();   
-        }
-        else{
-          //*******待施工
-        }
-        }
       
+         else if(compare>=2&&compare<=12){//左大右小
+          leftward();
+          forward();
+        }
+         else if(compare<=-2&&compare>=-12){//左小右大
+          rightward();
+           forward();
+        }
+      }
+  
       //**************************************
- // 藍芽傳輸部分
+ // 藍芽傳輸部分 未測試
  // 用 @ 做為開始字元  @ F L R potition x y 換行
     bluetooth.print("@"); 
     bluetooth.print(distanceF);
@@ -155,6 +131,5 @@ void loop() {
     bluetooth.write(13); 
     
     delay(500);  
-  }
-
+  
 }
