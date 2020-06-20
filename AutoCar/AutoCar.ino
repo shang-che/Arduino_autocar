@@ -1,4 +1,3 @@
-#include <AFMotor.h>
 #include <SoftwareSerial.h>
 
 #define LeftTrig A0 //定義超音波感測器腳位
@@ -14,9 +13,6 @@
 #define TXD 10
 SoftwareSerial bluetooth(RXD, TXD);//宣布藍芽
 
-AF_Stepper left(256, 1); //宣告步進馬達腳位
-AF_Stepper right(256, 2);
-
 boolean sensorstate = 0; //宣告感應器狀態
 
 int start = 0; //宣告開始變數
@@ -27,6 +23,12 @@ unsigned long distanceF=0;//距離變數前左右
 unsigned long distanceL=0;
 unsigned long distanceR=0;
 
+int location[4][4];//宣告座標
+
+void add(){
+  
+  }
+
 //取得超音波距離函數
 unsigned long GetDistance(int Trig, int Echo) {
   unsigned long distance=100;
@@ -35,9 +37,10 @@ unsigned long GetDistance(int Trig, int Echo) {
   digitalWrite(Trig, HIGH);
   delayMicroseconds(10);
   digitalWrite(Trig, LOW);
-  unsigned long duration = pulseIn(Echo, HIGH);
+  unsigned long duration = pulseIn(Echo, HIGH, 1000);
+  Serial.println(duration);
   distance = duration/58;
-  delay(100);
+  delay(10);
   return distance;
 }
 
@@ -68,37 +71,6 @@ void bt(){
     bluetooth.print(runstatus);
     bluetooth.write(13); 
 }
-//定義前進函數
-void forward(){
-  left.onestep(BACKWARD, DOUBLE );
-  right.onestep(FORWARD, DOUBLE );
-  delay(2);
-  runstatus='F';
-}
-
-//定義後退函數
-void backward(){
-  left.onestep(FORWARD, DOUBLE );
-  right.onestep(BACKWARD, DOUBLE );
-  delay(2);
-  runstatus='B';
-}
-
-//定義右轉函數
-void rightward(){
-  left.onestep(BACKWARD, DOUBLE );
-  right.onestep(BACKWARD, DOUBLE );
-  delay(2);
-  runstatus='R';
-}
-
-//定義左轉函數
-void leftward(){
-  left.onestep(FORWARD, DOUBLE );
-  right.onestep(FORWARD, DOUBLE );
-  delay(2);
-  runstatus='L';
-}
 
 void setup() {
   Serial.begin(9600);         
@@ -111,8 +83,6 @@ void setup() {
   pinMode(RightEcho, INPUT);
   pinMode(FrontTrig, OUTPUT);
   pinMode(FrontEcho, INPUT);
-  left.setSpeed(400.0);
-  right.setSpeed(400.0);
 }
 
 
@@ -120,11 +90,14 @@ void loop() {
   stats();
   
   //預定座標系統
-  sensorstate = digitalRead(sensor);
- // if(sensorstate == 0)
- //  Serial.println("clear");
- // else
- //   Serial.println("line");
+  //sensorstate = digitalRead(sensor);
+  //if(sensorstate == 1){
+  //  add();
+  //  }
+//  if(sensorstate == 0)
+//   Serial.println("clear");
+//  else
+//    Serial.println("line");
    
   int compare=distanceL-distanceR; //中間約左4右4
   Serial.print("comapre test:");
@@ -132,7 +105,7 @@ void loop() {
   Serial.print("run way:");
   Serial.println(runstatus);  
   if(distanceF>=5){//如果前方不是死路
-      if(compare>=-1&&compare<=1){//不需要修正就繼續前進(
+      if(compare>=-3&&compare<=3){//不需要修正就繼續前進(
         forward();
           
       }     
@@ -150,7 +123,7 @@ void loop() {
   }
 
   bt();
-  Serial.println("---------------"); 
+  Serial.println("---------------"); */
 }
 
 /*
