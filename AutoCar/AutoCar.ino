@@ -25,6 +25,9 @@ unsigned long distanceR=0;
 
 int location[4][4];//宣告座標
 
+int Left = 11;//左右輪輸出pin
+int Right =10;//
+
 void add(){
   
   }
@@ -83,6 +86,8 @@ void setup() {
   pinMode(RightEcho, INPUT);
   pinMode(FrontTrig, OUTPUT);
   pinMode(FrontEcho, INPUT);
+  pinMode(Left, OUTPUT);//左輪輸出
+  pinMode(Right, OUTPUT);//右輪輸出
 }
 
 
@@ -106,16 +111,16 @@ void loop() {
   Serial.println(runstatus);  
   if(distanceF>=5){//如果前方不是死路
       if(compare>=-3&&compare<=3){//不需要修正就繼續前進(
-        forward();
-          
+        analogWrite(Left, 255);
+        analogWrite(Right, 255);
       }     
       else if(compare>=2&&compare<=12){//左大右小
-        forward();
-        leftward();      
+        analogWrite(Left, 255);
+        analogWrite(Right, 127);     
       }
       else if(compare<=-2&&compare>=-12){//左小右大
-        forward();         
-        rightward();
+        analogWrite(Left, 127);
+        analogWrite(Right, 255);
       }
   }
   else{
