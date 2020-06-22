@@ -15,10 +15,13 @@
 #define RXD 2 //定義藍芽腳位
 #define TXD 3
 SoftwareSerial bluetooth(RXD, TXD);//宣布藍芽
+//注意板子上RXD接3,TXD接2
 
 boolean sensorstate = 0; //宣告感應器狀態
 
 int start = 0; //宣告開始變數
+
+int compare;//左右差距
 
 char runstatus= 'X'; //給藍芽的狀態
 
@@ -26,7 +29,7 @@ unsigned long distanceF=0;//距離變數前左右
 unsigned long distanceL=0;
 unsigned long distanceR=0;
 
-//取得超音波距離函數
+//取得超音波距離
 unsigned long GetDistance(int Trig, int Echo) {
   unsigned long distance=100;
   digitalWrite(Trig, LOW);
@@ -34,16 +37,14 @@ unsigned long GetDistance(int Trig, int Echo) {
   digitalWrite(Trig, HIGH);
   delayMicroseconds(10);
   digitalWrite(Trig, LOW);
-  //==================================================
   unsigned long duration = pulseIn(Echo, HIGH);
-  //==================================================
   distance = duration/58;
   delay(100);
   return distance;
 }
 
-int compare;
-//監控
+
+//電腦監控
 void stats(){
     Serial.print("df:");
     Serial.println(distanceF);
@@ -119,11 +120,38 @@ void stopmove(){
   runstatus='X';
 }
 
+void runway(){//路線決定
+       compare=distanceL-distanceR; //中間約左4右4 
+     if(distanceF>=5){//如果前方不是死路
+         if(compare>=-1&&compare<=1){//不需要修正就繼續前進(
+              forward();
+          }     
+         else if(compare>=2&&compare<=12){//左大右小
+             lf();    
+         }
+         else if(compare<=-2&&compare>=-12){//左小右大
+             rf();
+          }
+      }
+     else {//前面沒路
+        if(compare>=13){//左邊有路
+         leftward();
+         }
+         else if(compare<=-13){//右邊有路
+         Rightward();
+         }
+         else{//死路
+          stopmove();
+         }
+      }
+}
 
 void setup() {
   Serial.begin(9600);         
   Serial.setTimeout(100); //每100毫秒接收一次
   Serial.println("test start!");
+  bluetooth.begin(9600);
+  bluetooth.setTimeout(100);
   //pinMode(sensor, INPUT);
   pinMode(LeftTrig, OUTPUT);
   pinMode(LeftEcho, INPUT);
@@ -133,72 +161,36 @@ void setup() {
   pinMode(FrontEcho, INPUT);
   pinMode(controlLeft, OUTPUT);
   pinMode(controlRight, OUTPUT);
-
 }
 
 
 void loop() {
-
-  distanceF = GetDistance(FrontTrig,FrontEcho);
-  distanceL = GetDistance(LeftTrig,LeftEcho);
-  distanceR = GetDistance(RightTrig,RightEcho);
-  
-  //預定座標系統
- // sensorstate = digitalRead(sensor);
- // if(sensorstate == 0)
- //  Serial.println("clear");
- // else
- //   Serial.println("line");
-   
-  compare=distanceL-distanceR; //中間約左4右4 
-  if(distanceF>=5){//如果前方不是死路
-      if(compare>=-1&&compare<=1){//不需要修正就繼續前進(
-          forward();
-      }     
-      else if(compare>=2&&compare<=12){//左大右小
-          lf();    
-      }
-      else if(compare<=-2&&compare>=-12){//左小右大
-          rf();
-      }
+  if(bluetooth.available()){
+    int v=bluetooth.parseInt();
+    if(v==1){
+      start=1;
+    }
+    else if(v==9){
+      start=0;
+    }
   }
-  else {//前面沒路
-     if(compare>=13){//左邊有路
-      leftward();
-     }
-     else if(compare<=-13){//右邊有路
-      Rightward();
-     }
-     else{//死路
-      stopmove();
-     }
+    
+   if(start==1){
+      //Serial.println(start);確認手機傳出的東西
+      distanceF = GetDistance(FrontTrig,FrontEcho);
+      distanceL = GetDistance(LeftTrig,LeftEcho);
+      distanceR = GetDistance(RightTrig,RightEcho);
+      
+      runway();//路線決定
+      stats();//電腦監控
+      bt();//藍牙傳遞
+      
+      //預定座標系統
+     // sensorstate = digitalRead(sensor);
+    // if(sensorstate == 0)
+    //  Serial.println("clear");
+    // else
+    //   Serial.println("line");
+    
   }
-  stats();
-
-  //bt();
-  
-  
 }
-
-/*
-//藍芽測試
-#include <SoftwareSerial.h>
-const int rxpin = 2; // 接收 pin
-const int txpin = 10; // 發送 pin
-SoftwareSerial bluetooth(rxpin, txpin); // 建立虛擬序列埠
-void setup() {
-  Serial.begin(9600);
-  bluetooth.begin(9600); // 初始化藍芽序列埠
-}
-void loop() {
-  if (bluetooth.available())
-  {
-    char c = bluetooth.read();
-    Serial.print(c);
-  }
-  if (Serial.available())
-  {
-    char c = Serial.read();
-    bluetooth.print(c);
-  }
-}*/
