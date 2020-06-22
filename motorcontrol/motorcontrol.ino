@@ -48,7 +48,9 @@ void loop() {
   //0-----85-----170-----255
   // 區間1 | 區間2 |  區間3
   // 43      127      213
-  /*
+  //0-----341-----682-----1023
+  //  170      511      852
+  /*控制方
   前進:左213 右213
   後退:左43      右43
   左修正:左213  右127
@@ -57,19 +59,19 @@ void loop() {
   右轉:左43 右213
   停止:左127 右127
   */
-  if(valueL > 170 && valueR > 170 && valueL < 255 && valueR < 255)
+  if(valueL > 682 && valueR > 682)
     forward();
-  if(valueL < 85 && valueR < 85 && valueL > 0  && valueR > 0)
+  if(valueL < 341 && valueR < 341)
     backward();
-  if(valueL > 170 && valueR > 0 && valueL < 255 && valueR < 85)
+  if(valueL > 682 && valueR < 341)
     leftward();
-  if(valueL > 0 && valueR < 255 && valueL < 85 && valueR > 170)
+  if(valueL < 341 && valueR > 682)
     rightward();
-  if(valueL > 170 && valueR < 170 && valueL < 255 && valueR > 85){
+  if(valueL > 682 && valueR < 682 && valueR > 341){
     forward();
     leftward();
   }
-  if(valueL > 85 && valueR < 255 && valueL < 170 && valueR > 170){
+  if(valueL > 341 && valueL < 682 && valueR > 682){
     forward();
     rightward();
   }
