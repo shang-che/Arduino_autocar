@@ -36,7 +36,6 @@ unsigned long GetDistance(int Trig, int Echo) {
   digitalWrite(Trig, LOW);
   //==================================================
   unsigned long duration = pulseIn(Echo, HIGH);
-  //unsigned long duration = pulseIn(Echo, HIGH, 1000);
   //==================================================
   distance = duration/58;
   delay(100);
@@ -75,42 +74,42 @@ void bt(){
 }
 //定義前進函數
 void forward(){
-  analogWrite(controlLeft, 255);
-  analogWrite(controlRight, 255);
+  analogWrite(controlLeft, 213);
+  analogWrite(controlRight, 213);
   runstatus='F';
 }
 
 //定義後退函數
 void backward(){
-  analogWrite(controlLeft, 0);
-  analogWrite(controlRight,0);
+  analogWrite(controlLeft, 43);
+  analogWrite(controlRight,43);
   runstatus='B';
 }
 
 //定義右修正函數
 void rf(){
   analogWrite(controlLeft, 127);
-  analogWrite(controlRight,255);
+  analogWrite(controlRight,213);
   runstatus='r';
 }
 
 //定義左修正函數
 void lf(){
-  analogWrite(controlLeft, 255);
+  analogWrite(controlLeft, 213);
   analogWrite(controlRight,127);
   runstatus='l';
 }
 
 //定義左轉函數
 void leftward(){
-  analogWrite(controlLeft, 255);
-  analogWrite(controlRight,0);
+  analogWrite(controlLeft, 213);
+  analogWrite(controlRight,43);
   runstatus='L';
 }
 //定義右轉函數
 void Rightward(){
-  analogWrite(controlLeft, 0);
-  analogWrite(controlRight,255);
+  analogWrite(controlLeft, 43);
+  analogWrite(controlRight,213);
   runstatus='R';
 }
 //停止
@@ -132,6 +131,8 @@ void setup() {
   pinMode(RightEcho, INPUT);
   pinMode(FrontTrig, OUTPUT);
   pinMode(FrontEcho, INPUT);
+  pinMode(controlLeft, OUTPUT);
+  pinMode(controlRight, OUTPUT);
 
 }
 

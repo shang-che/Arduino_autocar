@@ -47,28 +47,29 @@ void loop() {
 
   //0-----85-----170-----255
   // 區間1 | 區間2 |  區間3
+  // 43      127      213
   /*
-  前進:左255 右255
-  後退:左0      右0
-  左修正:左255  右127
-  右修正:左127 右255
-  左轉:左255 右0
-  右轉:左0 右255
+  前進:左213 右213
+  後退:左43      右43
+  左修正:左213  右127
+  右修正:左127 右213
+  左轉:左213 右43
+  右轉:左43 右213
   停止:左127 右127
   */
-  if(valueL > 170 && valueR > 170 && valueL <= 255 && valueR <= 255)
+  if(valueL > 170 && valueR > 170 && valueL < 255 && valueR < 255)
     forward();
-  if(valueL < 85 && valueR < 85 && valueL >= 0  && valueR >= 0)
+  if(valueL < 85 && valueR < 85 && valueL > 0  && valueR > 0)
     backward();
-  if(valueL > 170 && valueR >= 0 && valueL <= 255 && valueR < 85)
+  if(valueL > 170 && valueR > 0 && valueL < 255 && valueR < 85)
     leftward();
-  if(valueL >= 0 && valueR <= 255 && valueL < 85 && valueR > 170)
+  if(valueL > 0 && valueR < 255 && valueL < 85 && valueR > 170)
     rightward();
-  if(valueL > 170 && valueR < 170 && valueL <= 255 && valueR > 85){
+  if(valueL > 170 && valueR < 170 && valueL < 255 && valueR > 85){
     forward();
     leftward();
   }
-  if(valueL >= 0 && valueR < 170 && valueL < 85 && valueR > 85){
+  if(valueL > 85 && valueR < 255 && valueL < 170 && valueR > 170){
     forward();
     rightward();
   }
