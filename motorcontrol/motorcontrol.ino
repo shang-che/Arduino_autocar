@@ -19,24 +19,65 @@ void backward(){
 
 //定義右轉函數
 void rightward(){
-  left.onestep(BACKWARD, DOUBLE );
-  right.onestep(BACKWARD, DOUBLE );
-  delay(2);
+  for(int i = 0;i<600;i++){
+	  left.onestep(BACKWARD, DOUBLE );
+	  right.onestep(FORWARD, DOUBLE );
+	  delay(2);
+  }
+  for(int j = 0;j<1648;j++){
+	  left.onestep(BACKWARD, DOUBLE );
+	  right.onestep(BACKWARD, DOUBLE );
+	  delay(2);
+  }
+  for(int k = 0;k<600;k++){
+	  left.onestep(BACKWARD, DOUBLE );
+	  right.onestep(FORWARD, DOUBLE );
+	  delay(2);
+  }
 }
 
 //定義左轉函數
 void leftward(){
-  left.onestep(FORWARD, DOUBLE );
-  right.onestep(FORWARD, DOUBLE );
-  delay(2);
+  for(int i = 0;i<600;i++){
+	  left.onestep(BACKWARD, DOUBLE );
+	  right.onestep(FORWARD, DOUBLE );
+	  delay(2);
+  }
+  for(int j = 0;j<1648;j++){
+	  left.onestep(FORWARD, DOUBLE );
+	  right.onestep(FORWARD, DOUBLE );
+	  delay(2);
+  }
+  for(int k = 0;k<600;k++){
+	  left.onestep(BACKWARD, DOUBLE );
+	  right.onestep(FORWARD, DOUBLE );
+	  delay(2);
+  }
+}
+
+//定義右修正函數
+void rf(){
+	  left.onestep(BACKWARD, DOUBLE );
+	  right.onestep(FORWARD, DOUBLE );
+	  delay(2);
+	  left.onestep(BACKWARD, DOUBLE );
+	  right.onestep(BACKWARD, DOUBLE );
+	  delay(2);
+}
+
+void lf(){
+	  left.onestep(BACKWARD, DOUBLE );
+	  right.onestep(FORWARD, DOUBLE );
+	  delay(2);
+	  left.onestep(FORWARD, DOUBLE );
+	  right.onestep(FORWARD, DOUBLE );
+	  delay(2);
 }
 void setup() {
   Serial.begin(9600);         
   Serial.setTimeout(100); //每100毫秒接收一次
   pinMode(A0, INPUT);//左輪輸入
   pinMode(A1, INPUT);//右輪輸入
-
-
 }
 
 void loop() {
@@ -51,8 +92,8 @@ void loop() {
   //0-----341-----682-----1023
   //  170      511      852
   /*控制方
-  前進:左213 右213
-  後退:左43      右43
+  前進:左213 右213         852
+  後退:左43      右43    
   左修正:左213  右127
   右修正:左127 右213
   左轉:左213 右43
@@ -67,12 +108,8 @@ void loop() {
     leftward();
   if(valueL < 341 && valueR > 682)
     rightward();
-  if(valueL > 682 && valueR < 682 && valueR > 341){
-    forward();
-    leftward();
-  }
-  if(valueL > 341 && valueL < 682 && valueR > 682){
-    forward();
-    rightward();
-  }
+  if(valueL > 682 && valueR < 682 && valueR > 341)
+    lf();
+  if(valueL > 341 && valueL < 682 && valueR > 682)
+	rf();
 }
