@@ -7,9 +7,11 @@
 #define FrontTrig 7
 #define FrontEcho 6
 
-#define controlLeft 11 //接到A0
-#define controlRight 10 //接到A1
- 
+#define LA A0 //接到A0 控制左右
+#define LB A1 //接到A1
+#define RA A2 //接到A2
+#define RB A3 //接到A3
+
 #define sensor  //定義紅外線感測器腳位
 
 #define RXD 2 //定義藍芽腳位
@@ -61,7 +63,6 @@ void stats(){
 
 //藍芽傳輸
 void bt(){
-   // 藍芽傳輸部分 未測試
  // 用 @ 做為開始字元  @ F L R potition 換行
     bluetooth.print("@"); 
     bluetooth.print(distanceF);
@@ -75,48 +76,62 @@ void bt(){
 }
 //定義前進函數
 void forward(){
-  analogWrite(controlLeft, 213);
-  analogWrite(controlRight, 213);
+  digitalWrite(LA, HIGH);
+  digitalWrite(LB, HIGH);
+  digitalWrite(RA, HIGH);
+  digitalWrite(RB, HIGH);
   runstatus='F';
 }
 
 //定義後退函數
-void backward(){
-  analogWrite(controlLeft, 43);
-  analogWrite(controlRight,43);
+/*void backward(){
+  digitalWrite(LA, );
+  digitalWrite(LB, );
+  digitalWrite(RA, );
+  digitalWrite(RB, );
   runstatus='B';
-}
+}*/
 
 //定義右修正函數
 void rf(){
-  analogWrite(controlLeft, 127);
-  analogWrite(controlRight,213);
+  digitalWrite(LA, LOW);
+  digitalWrite(LB, LOW);
+  digitalWrite(RA, HIGH);
+  digitalWrite(RB, LOW);
   runstatus='r';
 }
 
 //定義左修正函數
 void lf(){
-  analogWrite(controlLeft, 213);
-  analogWrite(controlRight,127);
+  digitalWrite(LA, HIGH);
+  digitalWrite(LB, LOW);
+  digitalWrite(RA, LOW);
+  digitalWrite(RB, LOW);
   runstatus='l';
 }
 
 //定義左轉函數
 void leftward(){
-  analogWrite(controlLeft, 213);
-  analogWrite(controlRight,43);
+  digitalWrite(LA, HIGH);
+  digitalWrite(LB, HIGH);
+  digitalWrite(RA, LOW);
+  digitalWrite(RB, LOW);
   runstatus='L';
 }
 //定義右轉函數
-void Rightward(){
-  analogWrite(controlLeft, 43);
-  analogWrite(controlRight,213);
+void rightward(){
+  digitalWrite(LA, LOW);
+  digitalWrite(LB, LOW);
+  digitalWrite(RA, HIGH);
+  digitalWrite(RB, HIGH);
   runstatus='R';
 }
 //停止
 void stopmove(){
-  analogWrite(controlLeft, 127);
-  analogWrite(controlRight,127);
+  digitalWrite(LA, LOW);
+  digitalWrite(LB, LOW);
+  digitalWrite(RA, LOW);
+  digitalWrite(RB, LOW);
   runstatus='X';
 }
 
@@ -138,7 +153,7 @@ void runway(){//路線決定
          leftward();
          }
          else if(compare<=-13){//右邊有路
-         Rightward();
+         rightward();
          }
          else{//死路
           stopmove();
@@ -159,21 +174,31 @@ void setup() {
   pinMode(RightEcho, INPUT);
   pinMode(FrontTrig, OUTPUT);
   pinMode(FrontEcho, INPUT);
-  pinMode(controlLeft, OUTPUT);
-  pinMode(controlRight, OUTPUT);
+  pinMode(LA, OUTPUT);
+  pinMode(LB, OUTPUT);
+  pinMode(RA, OUTPUT);
+  pinMode(RB, OUTPUT);
 }
 
 
 void loop() {
+
   if(bluetooth.available()){
     int v=bluetooth.parseInt();
+	  Serial.print("V:");
+	  Serial.println(v);  
     if(v==1){
       start=1;
     }
     else if(v==9){
       start=0;
+	  stopmove();
     }
   }
+  /*else{
+	  start=0;
+	  stopmove();
+  }*/
     
    if(start==1){
       //Serial.println(start);確認手機傳出的東西
