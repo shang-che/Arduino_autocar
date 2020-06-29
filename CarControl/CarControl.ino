@@ -12,16 +12,12 @@
 #define RA A2 //接到A2
 #define RB A3 //接到A3
 
-#define sensor  //定義紅外線感測器腳位
-
 #define RXD 2 //定義藍芽腳位
 #define TXD 3
 SoftwareSerial bluetooth(RXD, TXD);//宣布藍芽
 //注意板子上RXD接3,TXD接2
 
 int dct=1;//下層狀況接收
-
-boolean sensorstate = 0; //宣告感應器狀態
 
 int start = 0; //宣告開始變數
 
@@ -186,8 +182,9 @@ void setup() {
 
 void loop() {
 
-  if(bluetooth.available()){
+ /* if(bluetooth.available()){
     int v=bluetooth.parseInt();
+    delay(100);
 	  Serial.print("V:");
 	  Serial.println(v);  
     if(v==1){
@@ -197,12 +194,10 @@ void loop() {
       start=0;
 	  stopmove();
     }
-  }
-  /*else{
-	  start=0;
-	  stopmove();
   }*/
+
    dct=digitalRead(A5) ;
+   start=1;
    if(start==1&&dct==1){
       //Serial.println(start);確認手機傳出的東西
       distanceF = GetDistance(FrontTrig,FrontEcho);
@@ -211,14 +206,7 @@ void loop() {
       
       runway();//路線決定
       stats();//電腦監控
-      bt();//藍牙傳遞
-      
-      //預定座標系統
-     // sensorstate = digitalRead(sensor);
-    // if(sensorstate == 0)
-    //  Serial.println("clear");
-    // else
-    //   Serial.println("line");
+      //bt();//藍牙傳遞
       
   }
 }

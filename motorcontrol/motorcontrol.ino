@@ -13,10 +13,10 @@ int valueRB = 0;//右馬達控制變數
 //定義前進函數
 void forward(){
   digitalWrite(A5, LOW);
-  left.onestep(FORWARD, DOUBLE );
+  left.onestep(BACKWARD, DOUBLE );
   right.onestep(FORWARD, DOUBLE );
   delay(2);
-  digitalWrite(A5, HIGH);
+  //digitalWrite(A5, HIGH);
 }
 
 //定義後退函數
@@ -91,6 +91,7 @@ void lf(){
     digitalWrite(A5, HIGH);    
 }
 void stopmove(){  
+  Serial.println("stop");
 }
 
 void setup() {
@@ -105,22 +106,22 @@ void setup() {
 
 void loop() {
   valueLA = digitalRead(A0);
-  delay(100);
+  //delay(100);
   valueLB = digitalRead(A1);
-  delay(100);
+ // delay(100);
   valueRA = digitalRead(A2);
-  delay(100);
+ // delay(100);
   valueRB = digitalRead(A3);
-  delay(100);
-  Serial.print("LA");
+ // delay(100);
+  /*Serial.print("LA");
   Serial.println(valueLA);
   Serial.print("LB");
   Serial.println(valueLB);
   Serial.print("RA");
   Serial.println(valueRA);
   Serial.print("RB");
-  Serial.println(valueRB);
-  delay(300);
+  Serial.println(valueRB);*/
+  //delay(300);
   /*控制方
   前進:1111
   (沒有)後退:XXXX   
