@@ -19,6 +19,8 @@
 SoftwareSerial bluetooth(RXD, TXD);//宣布藍芽
 //注意板子上RXD接3,TXD接2
 
+int dct=1;//下層狀況接收
+
 boolean sensorstate = 0; //宣告感應器狀態
 
 int start = 0; //宣告開始變數
@@ -178,6 +180,7 @@ void setup() {
   pinMode(LB, OUTPUT);
   pinMode(RA, OUTPUT);
   pinMode(RB, OUTPUT);
+  pinMode(dct, INPUT);
 }
 
 
@@ -199,8 +202,8 @@ void loop() {
 	  start=0;
 	  stopmove();
   }*/
-    
-   if(start==1){
+   dct=digitalRead(A5) ;
+   if(start==1&&dct==1){
       //Serial.println(start);確認手機傳出的東西
       distanceF = GetDistance(FrontTrig,FrontEcho);
       distanceL = GetDistance(LeftTrig,LeftEcho);
@@ -216,6 +219,6 @@ void loop() {
     //  Serial.println("clear");
     // else
     //   Serial.println("line");
-    
+      
   }
 }

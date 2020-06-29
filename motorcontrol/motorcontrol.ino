@@ -8,12 +8,15 @@ int valueLB = 0;//右馬達控制變數
 int valueRA = 0;//右馬達控制變數
 int valueRB = 0;//右馬達控制變數
 
-
+//A5 LOW 在做動作，無視上層指令
+//A5 HIGH 接受上層指令
 //定義前進函數
 void forward(){
+  digitalWrite(A5, LOW);
   left.onestep(FORWARD, DOUBLE );
   right.onestep(FORWARD, DOUBLE );
   delay(2);
+  digitalWrite(A5, HIGH);
 }
 
 //定義後退函數
@@ -22,9 +25,10 @@ void forward(){
   right.onestep(BACKWARD, DOUBLE );
   delay(2);
 }*/
-
+//接受上層指令
 //定義右轉函數
 void rightward(){
+  digitalWrite(A5, LOW);  
   for(int i = 0;i<600;i++){
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
@@ -40,10 +44,12 @@ void rightward(){
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
+  digitalWrite(A5, HIGH);  
 }
 
 //定義左轉函數
 void leftward(){
+  digitalWrite(A5, LOW);  
   for(int i = 0;i<600;i++){
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
@@ -59,25 +65,30 @@ void leftward(){
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
+  digitalWrite(A5, HIGH);  
 }
 
 //定義右修正函數
 void rf(){
+    digitalWrite(A5, LOW);  
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(BACKWARD, DOUBLE );
 	  delay(2);
+    digitalWrite(A5, HIGH);  
 }
 
 void lf(){
+    digitalWrite(A5, LOW);  
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
 	  left.onestep(FORWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
+    digitalWrite(A5, HIGH);    
 }
 void stopmove(){  
 }
@@ -89,10 +100,10 @@ void setup() {
   pinMode(A1, INPUT);//LB
   pinMode(A2, INPUT);//RA
   pinMode(A3, INPUT);//RB
+  pinMode(A5, OUTPUT);//通訊上層
 }
 
 void loop() {
-
   valueLA = digitalRead(A0);
   delay(100);
   valueLB = digitalRead(A1);
