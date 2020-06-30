@@ -12,7 +12,7 @@ int valueRB = 0;//右馬達控制變數
 //A5 HIGH 接受上層指令
 //定義前進函數
 void forward(){
-  digitalWrite(A5, LOW);
+  //digitalWrite(A5, LOW);
   left.onestep(BACKWARD, DOUBLE );
   right.onestep(FORWARD, DOUBLE );
   delay(2);
@@ -34,7 +34,7 @@ void rightward(){
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
-  for(int j = 0;j<1648;j++){
+  for(int j = 0;j<1000;j++){
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(BACKWARD, DOUBLE );
 	  delay(2);
@@ -55,7 +55,8 @@ void leftward(){
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
-  for(int j = 0;j<1648;j++){
+ 
+  for(int j = 0;j<1000;j++){
 	  left.onestep(FORWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
@@ -70,25 +71,25 @@ void leftward(){
 
 //定義右修正函數
 void rf(){
-    digitalWrite(A5, LOW);  
+    //digitalWrite(A5, LOW);  
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(BACKWARD, DOUBLE );
 	  delay(2);
-    digitalWrite(A5, HIGH);  
+    //digitalWrite(A5, HIGH);  
 }
 
 void lf(){
-    digitalWrite(A5, LOW);  
+    //digitalWrite(A5, LOW);  
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
 	  left.onestep(FORWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
-    digitalWrite(A5, HIGH);    
+    //digitalWrite(A5, HIGH);    
 }
 void stopmove(){  
   Serial.println("stop");
@@ -102,9 +103,12 @@ void setup() {
   pinMode(A2, INPUT);//RA
   pinMode(A3, INPUT);//RB
   pinMode(A5, OUTPUT);//通訊上層
+  digitalWrite(A5,HIGH);
+  
 }
 
 void loop() {
+  
   valueLA = digitalRead(A0);
   //delay(100);
   valueLB = digitalRead(A1);
@@ -130,7 +134,7 @@ void loop() {
   左轉:1100
   右轉:0011
   停止:0000
-  */
+*/  
   if(valueLA==1&&valueLB==1){
     if(valueRA==1&&valueRB==1){//1111 
       forward();
@@ -155,4 +159,5 @@ void loop() {
   }
      
   Serial.println("---------------");
+
 }

@@ -135,7 +135,7 @@ void stopmove(){
 
 void runway(){//路線決定
        compare=distanceL-distanceR; //中間約左4右4 
-     if(distanceF>=5){//如果前方不是死路
+     if(distanceF>=8){//如果前方不是死路
          if(compare>=-1&&compare<=1){//不需要修正就繼續前進(
               forward();
           }     
@@ -177,12 +177,13 @@ void setup() {
   pinMode(RA, OUTPUT);
   pinMode(RB, OUTPUT);
   pinMode(dct, INPUT);
+  dct=1;
 }
 
 
 void loop() {
-
- /* if(bluetooth.available()){
+    
+  /*if(bluetooth.available()){
     int v=bluetooth.parseInt();
     delay(100);
 	  Serial.print("V:");
@@ -194,10 +195,12 @@ void loop() {
       start=0;
 	  stopmove();
     }
-  }*/
-
+  }
+  
    dct=digitalRead(A5) ;
+   */
    start=1;
+   
    if(start==1&&dct==1){
       //Serial.println(start);確認手機傳出的東西
       distanceF = GetDistance(FrontTrig,FrontEcho);
@@ -206,7 +209,7 @@ void loop() {
       
       runway();//路線決定
       stats();//電腦監控
-      //bt();//藍牙傳遞
+      bt();//藍牙傳遞
       
   }
 }
