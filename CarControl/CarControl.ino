@@ -179,14 +179,14 @@ void loop() {
   /*if(bluetooth.available()){
     int v=bluetooth.parseInt();
     delay(100);
-	  Serial.print("V:");
-	  Serial.println(v);  
+    Serial.print("V:");
+    Serial.println(v);  
     if(v==1){
       start=1;
     }
     else if(v==9){
       start=0;
-	  stopmove();
+    stopmove();
     }
   }
   */
