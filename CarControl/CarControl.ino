@@ -17,7 +17,7 @@
 SoftwareSerial bluetooth(RXD, TXD);//宣布藍芽
 //注意板子上RXD接3,TXD接2
 
-int dct=1;//下層狀況接收
+int dct=HIGH;//下層狀況接收
 
 int start = 0; //宣告開始變數
 
@@ -134,10 +134,10 @@ void runway(){//路線決定
       }
       else{
         if(distanceF>=5){
-            if(compare>=4){
+            if(compare>2){
               lf();
             }
-            else if(compare<=-4){
+            else if(compare<-2){
               rf();
             }
             else{
@@ -169,7 +169,8 @@ void setup() {
   pinMode(RA, OUTPUT);
   pinMode(RB, OUTPUT);
   pinMode(dct, INPUT);
-  dct=1;
+  dct=HIGH;
+  delay(5000);
 }
 
 
@@ -192,6 +193,14 @@ void loop() {
    dct=digitalRead(A5) ;
    Serial.print("dct:");
    Serial.println(dct);
+   if(dct==0){
+    distanceF = GetDistance(FrontTrig,FrontEcho);
+    distanceL = GetDistance(LeftTrig,LeftEcho);
+    distanceR = GetDistance(RightTrig,RightEcho);
+    compare=distanceL-distanceR;
+    stats();
+    bt();
+   }
    start=1;
    //dct=1;
    if(start==1&&dct==HIGH){
