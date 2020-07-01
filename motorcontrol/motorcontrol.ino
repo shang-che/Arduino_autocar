@@ -12,9 +12,12 @@ int valueRB = 0;//右馬達控制變數
 //A5 HIGH 接受上層指令
 //定義前進函數
 void forward(){
+  Serial.println("f");
   //digitalWrite(A5, LOW);
+  for(int i=0;i<4;i++){
   left.onestep(BACKWARD, DOUBLE );
   right.onestep(FORWARD, DOUBLE );
+  }
   delay(2);
   //digitalWrite(A5, HIGH);
 }
@@ -28,8 +31,10 @@ void forward(){
 //接受上層指令
 //定義右轉函數
 void rightward(){
-  digitalWrite(A5, LOW);  
-  for(int i = 0;i<600;i++){
+  digitalWrite(A5, LOW);
+  Serial.println(A5);  
+  Serial.println("start");
+  for(int i = 0;i<1300;i++){
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
@@ -45,12 +50,16 @@ void rightward(){
 	  delay(2);
   }
   digitalWrite(A5, HIGH);  
+  Serial.println(A5);
+  Serial.println("end");
 }
 
 //定義左轉函數
 void leftward(){
-  digitalWrite(A5, LOW);  
-  for(int i = 0;i<600;i++){
+  digitalWrite(A5, LOW);
+  Serial.println(A5);
+  Serial.println("start");  
+  for(int i = 0;i<1300;i++){
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
@@ -66,12 +75,15 @@ void leftward(){
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
-  digitalWrite(A5, HIGH);  
+  digitalWrite(A5, HIGH);
+  Serial.println(A5); 
+  Serial.println("end"); 
 }
 
 //定義右修正函數
 void rf(){
-    //digitalWrite(A5, LOW);  
+    //digitalWrite(A5, LOW);
+    Serial.println("rf");  
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
@@ -82,7 +94,8 @@ void rf(){
 }
 
 void lf(){
-    //digitalWrite(A5, LOW);  
+    //digitalWrite(A5, LOW); 
+    Serial.println("lf"); 
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);

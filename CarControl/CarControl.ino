@@ -81,15 +81,6 @@ void forward(){
   runstatus='F';
 }
 
-//定義後退函數
-/*void backward(){
-  digitalWrite(LA, );
-  digitalWrite(LB, );
-  digitalWrite(RA, );
-  digitalWrite(RB, );
-  runstatus='B';
-}*/
-
 //定義右修正函數
 void rf(){
   digitalWrite(LA, LOW);
@@ -135,28 +126,29 @@ void stopmove(){
 
 void runway(){//路線決定
        compare=distanceL-distanceR; //中間約左4右4 
-     if(distanceF>=8){//如果前方不是死路
-         if(compare>=-1&&compare<=1){//不需要修正就繼續前進(
+      if(compare>=13){
+        leftward();  
+      }
+      else if(compare<=-13){
+        rightward();
+      }
+      else{
+        if(distanceF>=5){
+            if(compare>=4){
+              lf();
+            }
+            else if(compare<=-4){
+              rf();
+            }
+            else{
               forward();
-          }     
-         else if(compare>=2&&compare<=12){//左大右小
-             lf();    
-         }
-         else if(compare<=-2&&compare>=-12){//左小右大
-             rf();
-          }
-      }
-     else {//前面沒路
-        if(compare>=13){//左邊有路
-         leftward();
-         }
-         else if(compare<=-13){//右邊有路
-         rightward();
-         }
-         else{//死路
+            }
+        }
+        else{
           stopmove();
-         }
+        }
       }
+      
 }
 
 void setup() {
@@ -196,12 +188,13 @@ void loop() {
 	  stopmove();
     }
   }
-  
+  */
    dct=digitalRead(A5) ;
-   */
+   Serial.print("dct:");
+   Serial.println(dct);
    start=1;
-   
-   if(start==1&&dct==1){
+   //dct=1;
+   if(start==1&&dct==HIGH){
       //Serial.println(start);確認手機傳出的東西
       distanceF = GetDistance(FrontTrig,FrontEcho);
       distanceL = GetDistance(LeftTrig,LeftEcho);
