@@ -12,13 +12,14 @@ int valueRB = 0;//右馬達控制變數
 //A5 HIGH 接受上層指令
 //定義前進函數
 void forward(){
-  Serial.println("f");
+  //Serial.println("f");
   //digitalWrite(A5, LOW);
-  for(int i=0;i<4;i++){
-  left.onestep(BACKWARD, DOUBLE );
-  right.onestep(FORWARD, DOUBLE );
+
+  for(int i = 0;i<50;i++){
+    left.onestep(BACKWARD, DOUBLE );
+    right.onestep(FORWARD, DOUBLE );
+    delay(2);
   }
-  delay(2);
   //digitalWrite(A5, HIGH);
 }
 
@@ -31,15 +32,15 @@ void forward(){
 //接受上層指令
 //定義右轉函數
 void rightward(){
-  digitalWrite(A5, LOW);
-  Serial.println(A5);  
-  Serial.println("start");
-  for(int i = 0;i<1300;i++){
+  stopmove();
+  /*digitalWrite(A5, LOW);
+  Serial.println("startr");
+  for(int i = 0;i<1400;i++){
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
-  for(int j = 0;j<1000;j++){
+  for(int j = 0;j<900;j++){
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(BACKWARD, DOUBLE );
 	  delay(2);
@@ -49,36 +50,38 @@ void rightward(){
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
-  digitalWrite(A5, HIGH);  
-  Serial.println(A5);
-  Serial.println("end");
+   
+  stopmove();
+  digitalWrite(A5, HIGH);
+  Serial.println("endr");
+*/
 }
 
-//定義左轉函數
-void leftward(){
-  digitalWrite(A5, LOW);
-  Serial.println(A5);
-  Serial.println("start");  
-  for(int i = 0;i<1300;i++){
+void leftward(){//定義左轉函數
+  stopmove();
+ /* digitalWrite(A5, LOW);
+  Serial.println("startl");  
+  for(int i = 0;i<1400;i++){
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
  
-  for(int j = 0;j<1000;j++){
+  for(int j = 0;j<900;j++){
 	  left.onestep(FORWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
-  for(int k = 0;k<600;k++){
+  for(int k = 0;k<700;k++){
 	  left.onestep(BACKWARD, DOUBLE );
 	  right.onestep(FORWARD, DOUBLE );
 	  delay(2);
   }
   digitalWrite(A5, HIGH);
-  Serial.println(A5); 
-  Serial.println("end"); 
-}
+  stopmove();
+  Serial.println("endl"); 
+
+*/}
 
 //定義右修正函數
 void rf(){
@@ -117,7 +120,7 @@ void setup() {
   pinMode(A3, INPUT);//RB
   pinMode(A5, OUTPUT);//通訊上層
   digitalWrite(A5,HIGH);
-  
+  delay(5000);
 }
 
 void loop() {
@@ -130,24 +133,24 @@ void loop() {
  // delay(100);
   valueRB = digitalRead(A3);
  // delay(100);
-  /*Serial.print("LA");
+  Serial.print("LA");
   Serial.println(valueLA);
   Serial.print("LB");
   Serial.println(valueLB);
   Serial.print("RA");
   Serial.println(valueRA);
   Serial.print("RB");
-  Serial.println(valueRB);*/
+  Serial.println(valueRB);
   //delay(300);
-  /*控制方
-  前進:1111
-  (沒有)後退:XXXX   
-  左修正:1000
-  右修正:0010
-  左轉:1100
-  右轉:0011
-  停止:0000
-*/  
+  //控制方
+  //前進:1111
+  //(沒有)後退:XXXX   
+  //左修正:1000
+  //右修正:0010
+  //左轉:1100
+  //右轉:0011
+  //停止:0000
+
   if(valueLA==1&&valueLB==1){
     if(valueRA==1&&valueRB==1){//1111 
       forward();
@@ -156,10 +159,10 @@ void loop() {
       leftward();
     }
   }
-  if(valueLA==1&&valueLB==0){//1000
+  else if(valueLA==1&&valueLB==0){//1000
     lf();
   }
-  if(valueLA==0&&valueLB==0){
+  else if(valueLA==0&&valueLB==0){
     if(valueRA==1&&valueRB==1){//0011
       rightward();
     }
@@ -170,7 +173,7 @@ void loop() {
       stopmove();
     }
   }
-     
+
   Serial.println("---------------");
 
 }
