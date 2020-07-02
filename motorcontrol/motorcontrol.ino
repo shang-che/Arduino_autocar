@@ -8,13 +8,13 @@ int valueLB = 0;//右馬達控制變數
 int valueRA = 0;//右馬達控制變數
 int valueRB = 0;//右馬達控制變數
 
+char stats='X';
 //A5 LOW 在做動作，無視上層指令
 //A5 HIGH 接受上層指令
 //定義前進函數
 void forward(){
   //Serial.println("f");
-  //digitalWrite(A5, LOW);
-
+  stats='f';
   for(int i = 0;i<50;i++){
     left.onestep(BACKWARD, DOUBLE );
     right.onestep(FORWARD, DOUBLE );
@@ -23,88 +23,95 @@ void forward(){
   //digitalWrite(A5, HIGH);
 }
 
-//定義後退函數
-/*void backward(){
-  left.onestep(BACKWARD, DOUBLE );
-  right.onestep(BACKWARD, DOUBLE );
-  delay(2);
-}*/
 //接受上層指令
 //定義右轉函數
 void rightward(){
-  stopmove();
-  /*digitalWrite(A5, LOW);
-  Serial.println("startr");
-  for(int i = 0;i<1400;i++){
-	  left.onestep(BACKWARD, DOUBLE );
-	  right.onestep(FORWARD, DOUBLE );
-	  delay(2);
+  if(stats!='R'){
+    stats='R';
+    digitalWrite(A5, LOW);
+    Serial.println("startr");
+    for(int i = 0;i<1400;i++){
+      left.onestep(BACKWARD, DOUBLE );
+      right.onestep(FORWARD, DOUBLE );
+      delay(2);
+    }
+    for(int j = 0;j<900;j++){
+      left.onestep(BACKWARD, DOUBLE );
+      right.onestep(BACKWARD, DOUBLE );
+      delay(2);
+    }
+    for(int k = 0;k<600;k++){
+      left.onestep(BACKWARD, DOUBLE );
+      right.onestep(FORWARD, DOUBLE );
+      delay(2);
+    }
+     
+    digitalWrite(A5, HIGH);
+    Serial.println("endr");
   }
-  for(int j = 0;j<900;j++){
-	  left.onestep(BACKWARD, DOUBLE );
-	  right.onestep(BACKWARD, DOUBLE );
-	  delay(2);
+  else{
+    valueLA=LOW;
+    valueLB=LOW;
+    valueRA=LOW;
+    valueRB=LOW;
   }
-  for(int k = 0;k<600;k++){
-	  left.onestep(BACKWARD, DOUBLE );
-	  right.onestep(FORWARD, DOUBLE );
-	  delay(2);
-  }
-   
-  stopmove();
-  digitalWrite(A5, HIGH);
-  Serial.println("endr");
-*/
 }
-
 void leftward(){//定義左轉函數
-  stopmove();
- /* digitalWrite(A5, LOW);
-  Serial.println("startl");  
-  for(int i = 0;i<1400;i++){
-	  left.onestep(BACKWARD, DOUBLE );
-	  right.onestep(FORWARD, DOUBLE );
-	  delay(2);
+  if(stats!='L'){
+    stats='L';
+    digitalWrite(A5, LOW);
+    Serial.println("startl");  
+    for(int i = 0;i<1400;i++){
+      left.onestep(BACKWARD, DOUBLE );
+      right.onestep(FORWARD, DOUBLE );
+      delay(2);
+    }
+   
+    for(int j = 0;j<900;j++){
+      left.onestep(FORWARD, DOUBLE );
+      right.onestep(FORWARD, DOUBLE );
+      delay(2);
+    }
+    for(int k = 0;k<700;k++){
+      left.onestep(BACKWARD, DOUBLE );
+      right.onestep(FORWARD, DOUBLE );
+      delay(2);
+    }
+    digitalWrite(A5, HIGH);
+    stopmove();
+    Serial.println("endl"); 
   }
- 
-  for(int j = 0;j<900;j++){
-	  left.onestep(FORWARD, DOUBLE );
-	  right.onestep(FORWARD, DOUBLE );
-	  delay(2);
+  else{
+    valueLA=LOW;
+    valueLB=LOW;
+    valueRA=LOW;
+    valueRB=LOW;
   }
-  for(int k = 0;k<700;k++){
-	  left.onestep(BACKWARD, DOUBLE );
-	  right.onestep(FORWARD, DOUBLE );
-	  delay(2);
-  }
-  digitalWrite(A5, HIGH);
-  stopmove();
-  Serial.println("endl"); 
-
-*/}
+}
 
 //定義右修正函數
 void rf(){
+    stats='r';
     //digitalWrite(A5, LOW);
     Serial.println("rf");  
-	  left.onestep(BACKWARD, DOUBLE );
-	  right.onestep(FORWARD, DOUBLE );
-	  delay(2);
-	  left.onestep(BACKWARD, DOUBLE );
-	  right.onestep(BACKWARD, DOUBLE );
-	  delay(2);
+    left.onestep(BACKWARD, DOUBLE );
+    right.onestep(FORWARD, DOUBLE );
+    delay(2);
+    left.onestep(BACKWARD, DOUBLE );
+    right.onestep(BACKWARD, DOUBLE );
+    delay(2);
     //digitalWrite(A5, HIGH);  
 }
 
 void lf(){
     //digitalWrite(A5, LOW); 
     Serial.println("lf"); 
-	  left.onestep(BACKWARD, DOUBLE );
-	  right.onestep(FORWARD, DOUBLE );
-	  delay(2);
-	  left.onestep(FORWARD, DOUBLE );
-	  right.onestep(FORWARD, DOUBLE );
-	  delay(2);
+    left.onestep(BACKWARD, DOUBLE );
+    right.onestep(FORWARD, DOUBLE );
+    delay(2);
+    left.onestep(FORWARD, DOUBLE );
+    right.onestep(FORWARD, DOUBLE );
+    delay(2);
     //digitalWrite(A5, HIGH);    
 }
 void stopmove(){  
@@ -141,6 +148,8 @@ void loop() {
   Serial.println(valueRA);
   Serial.print("RB");
   Serial.println(valueRB);
+  Serial.print("stats;");
+  Serial.println(stats);
   //delay(300);
   //控制方
   //前進:1111
